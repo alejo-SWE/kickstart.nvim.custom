@@ -751,7 +751,11 @@ require('lazy').setup({
           end,
         },
         --
-
+        html = {},
+        cssls = {},
+        emmet_ls = {
+          filetypes = { 'html', 'css', 'scss', 'javascriptreact', 'typescriptreact' },
+        },
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
@@ -787,6 +791,9 @@ require('lazy').setup({
         'eslint_d',
         'prettierd',
         'ts_ls',
+        'html',
+        'cssls',
+        'emmet_ls',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
