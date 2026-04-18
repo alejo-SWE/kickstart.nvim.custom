@@ -113,6 +113,7 @@ vim.o.showmode = false
 vim.opt.tabstop = 2 -- how many spaces a <Tab> counts for
 vim.opt.shiftwidth = 2 -- how many spaces to use for autoindent
 vim.opt.expandtab = true -- convert tabs to spaces
+vim.opt.colorcolumn = '100'
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
@@ -175,6 +176,16 @@ vim.o.confirm = true
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+-- Keymaps for running Java
+vim.keymap.set('n', '<leader>jr', function()
+  vim.cmd 'write'
+
+  local dir = vim.fn.expand '%:h'
+  local class = vim.fn.expand '%:t:r'
+  local out = 'target/classes'
+
+  vim.cmd('split | terminal mkdir -p ' .. out .. ' && javac -d ' .. out .. ' ' .. dir .. '/*.java && java -cp ' .. out .. ' ' .. class)
+end, { desc = 'Run Java file' })
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
@@ -756,6 +767,7 @@ require('lazy').setup({
         emmet_ls = {
           filetypes = { 'html', 'css', 'scss', 'javascriptreact', 'typescriptreact' },
         },
+        jdtls = {},
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
@@ -794,6 +806,7 @@ require('lazy').setup({
         'html',
         'cssls',
         'emmet_ls',
+        'jdtls',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -849,10 +862,12 @@ require('lazy').setup({
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         typescript = { 'prettierd' },
+        typescriptreact = { 'prettierd' },
         tsx = { 'prettierd' },
         json = { 'prettierd' }, --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         javascript = { 'prettierd' },
+        javascriptreact = { 'prettierd' },
       },
     },
   },
@@ -1036,6 +1051,7 @@ require('lazy').setup({
         'query',
         'vim',
         'vimdoc',
+        'sql',
       },
       -- Autoinstall languages that are not installed
       auto_install = true,
@@ -1076,7 +1092,7 @@ require('lazy').setup({
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
